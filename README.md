@@ -11,7 +11,7 @@ This is a full-stack social media application with a real-time chat feature. The
 - Real-time chat with online/offline status
 - Responsive design
 
-  **Getting Started**
+**Getting Started**
 
 - Prerequisites
 - Node.js v18
