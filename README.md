@@ -22,7 +22,7 @@ This is a full-stack social media application with a real-time chat feature. The
 **Clone the repository**
 
 ```
-git clone https://github.com/your-username/social-media-app.git
+git clone https://github.com/sushanthshetty7/social-media-app.git
 ```
 
 **Install dependencies**
