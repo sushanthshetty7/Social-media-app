@@ -13,7 +13,7 @@ This is a full-stack social media application with a real-time chat feature. The
 
 **Getting Started**
 
-- Prerequisites
+**Prerequisites**
 - Node.js v18
 - MongoDB v5 or higher
 
