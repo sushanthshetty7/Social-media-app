@@ -58,5 +58,5 @@ app.use("/api/message", messageRoute)
 
 
 app.listen(8000, () => {
-  console.log("server is up");
+  console.log("NODEMON IS WORKING");
 });
