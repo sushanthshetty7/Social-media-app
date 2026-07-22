@@ -9,7 +9,7 @@ export default function Chatonline({ onlineUsers, currentId, setCurrentChat }) {
 
   useEffect(() => {
     const getFriends = async () => {
-      const resp = await axios.get("/user/friends/" + currentId);
+      const resp = await axios.get("/api/user/friends/" + currentId);
       setFriends(resp.data);
     };
     getFriends();
@@ -22,7 +22,7 @@ export default function Chatonline({ onlineUsers, currentId, setCurrentChat }) {
   // console.log(onlineUsers)
   const handleClick = async (user)=>{
     try{
-      const resp = await axios.get(`/conversiation/find/${currentId}/${user._id}`)
+      const resp = await axios.get(`/api/conversiation/find/${currentId}/${user._id}`)
       setCurrentChat(resp.data)
     }catch(err){
       console.log(err)

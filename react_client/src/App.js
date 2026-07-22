@@ -30,4 +30,6 @@ function App() {
   );
 }
 
+// testing hot reload
+
 export default App;  

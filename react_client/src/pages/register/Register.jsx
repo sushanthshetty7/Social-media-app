@@ -10,6 +10,10 @@ export default function Register() {
   const passwordAgain = useRef();
   const navigate = useNavigate();
 
+  const handleLoginPage = () => {
+  navigate("/login");
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     if (passwordAgain.current.value !== password.current.value) {
@@ -21,7 +25,7 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post("/auth/register", user);
+        await axios.post("/api/auth/register", user);
         navigate("/login");
       } catch (err) {
         console.log(err);
@@ -73,7 +77,7 @@ export default function Register() {
               Sign Up
             </button>
 
-            <button className="loginRegister">Log into your Account</button>
+            <button className="loginRegister" onClick={handleLoginPage}>Log into your Account</button>
           </form>
         </div>
       </div>

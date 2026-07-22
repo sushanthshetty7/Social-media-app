@@ -62,7 +62,7 @@ function Messenger() {
   useEffect(() => {
     const getConversiations = async () => {
       try {
-        const res = await axios.get("/conversiation/" + user._id);
+        const res = await axios.get("/api/conversiation/" + user._id);
         setConvo(res.data);
       } catch (err) {
         console.log(err);
@@ -74,7 +74,7 @@ function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const resp = await axios.get("/message/" + currentChat?._id);
+        const resp = await axios.get("/api/message/" + currentChat?._id);
         setMessages(resp.data);
       } catch (err) {
         console.log(err);
@@ -102,7 +102,7 @@ function Messenger() {
     });
 
     try {
-      const resp = await axios.post("/message", message);
+      const resp = await axios.post("/api/message", message);
       setMessages([...messages, resp.data]);
       setNewMessage("");
     } catch (err) {

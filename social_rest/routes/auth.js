@@ -3,40 +3,97 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
 
-//Register
+// Register
 router.post("/register", async (req, resp) => {
   try {
-    //generate new password
+    const { username, email, password } = req.body;
+
+    // Validate request
+    if (!username || !email || !password) {
+      return resp.status(400).json({
+        message: "Username, email and password are required",
+      });
+    }
+
+    // Check existing email
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return resp.status(409).json({
+        message: "User already exists",
+      });
+    }
+
+    // Hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    //create new user
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create user
     const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
+      username,
+      email,
       password: hashedPassword,
     });
 
-    //save user
+    // Save user
     const user = await newUser.save();
-    resp.status(200).json(user); 
+
+    // Remove password
+    const { password: userPassword, ...userData } = user._doc;
+
+    return resp.status(201).json(userData);
   } catch (err) {
-    resp.status(500).json(err); 
+    console.error("REGISTER ERROR:", err);
+
+    return resp.status(500).json({
+      message: "Internal server error",
+    });
   }
 });
 
-//login
-
+// Login
 router.post("/login", async (req, resp) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    !user && resp.status(404).json("user not found");
+    const { email, password } = req.body;
 
-    const ValidPassword = await bcrypt.compare(req.body.password, user.password)
-    !ValidPassword && resp.status(400).json("wrong password")
+    // Validate request
+    if (!email || !password) {
+      return resp.status(400).json({
+        message: "Email and password are required",
+      });
+    }
 
-    resp.status(200).json(user)
+    // Find user
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return resp.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Compare password
+    const validPassword = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!validPassword) {
+      return resp.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    // Remove password before sending user
+    const { password: userPassword, ...userData } = user._doc;
+
+    return resp.status(200).json(userData);
   } catch (err) {
-    resp.status(500).json(err);
+    console.error("LOGIN ERROR:", err);
+
+    return resp.status(500).json({
+      message: "Internal server error",
+    });
   }
 });
 
