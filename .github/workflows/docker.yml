@@ -51,20 +51,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
+     
+      
       - name: Deploy through SSM
         env:
           INSTANCE_ID: i-060a6dd047323b971
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "$INSTANCE_ID" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=[
-              "set -e",
-              "cd /home/ubuntu/social-app",
-              "docker compose pull backend frontend",
-              "docker compose up -d backend frontend",
-              "docker compose ps"
-            ]' \
+            --parameters "{\"commands\":[
+              \"set -e\",
+              \"cd /home/ubuntu/social-app\",
+              \"export IMAGE_TAG=${IMAGE_TAG}\",
+              \"docker compose pull backend frontend\",
+              \"docker compose up -d backend frontend\",
+              \"docker compose ps\"
+            ]}" \
             --query "Command.CommandId" \
             --output text)
 
@@ -103,3 +107,4 @@ jobs:
 
           echo "Deployment did not finish within 5 minutes."
           exit 1
+
